@@ -1,0 +1,162 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Rest base repo",
+    "description": "This is an api base to start new projects",
+    "contact": {
+      "email": "rochagonzalo@outlook.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": "Desarrollo"
+    },
+    {
+      "url": "https://apirestnodegr.herokuapp.com/api/v1",
+      "description": "Produccion"
+    }
+  ],
+  "tags": [
+    {
+      "name": "users",
+      "description": "Operations about users"
+    },
+    {
+      "name": "developers",
+      "description": "Operations available to regular developers"
+    }
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "get users",
+        "description": "You can get all users",
+        "operationId": "getUsers",
+        "responses": {
+          "200": {
+            "description": "The array of users in JSON format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Create a new user",
+        "description": "Adds an user to the system",
+        "requestBody": {
+          "description": "User to add",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        }
+      }
+    },
+    "users/:id": {
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Update an existing user by the id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "the id of the user that need to be updated",
+            "require": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody":{
+          "content": {
+            "application/json":{
+              "shema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The user has been updated",
+            "content": {
+              "application/json": {
+                "schema":{
+                  "$ref":"#/components/schemas/User"
+                }
+              }
+            }
+
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
+          },
+          "name": {
+            "type": "string",
+            "example": "Widget Adapter"
+          }
+        }
+      },
+      "Manufacturer": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "ACME Corporation"
+          },
+          "homePage": {
+            "type": "string",
+            "format": "url",
+            "example": "https://www.acme-corp.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "408-867-5309"
+          }
+        }
+      }
+    }
+  }
+}
