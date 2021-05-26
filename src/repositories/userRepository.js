@@ -1,17 +1,18 @@
-const User = require('../models/user');
+const User = require('../models/User');
 const bcrypt = require('bcrypt');
 class UserRepository{
     constructor(){
 
     };
 
-    /*async findAll(){
-        return await User.find();
-    }*/
-
+    async findAll(){
+        return await User.findAll();
+    }
+    /*
     async findAllWithPagination(filter, options){
         return await User.paginate(filter, options)
     }
+    /*
     async findById(id){
         return await User.findById(id);
     }
@@ -31,7 +32,7 @@ class UserRepository{
 
     async delete(id){
         return await User.findByIdAndRemove(id);
-    }
+    }*/
 }
 
 module.exports = UserRepository;

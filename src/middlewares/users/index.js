@@ -89,9 +89,11 @@ const _optionalFilterValid = check('filter').optional().custom(
 
 
 const getAllUsersRequestValidations = [
+    /*
     validJWT,
     _optionalFilterValid,
     validationResult
+    */
 ]
 
 const getUserRequestValidations = [

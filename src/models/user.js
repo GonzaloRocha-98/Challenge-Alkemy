@@ -1,45 +1,32 @@
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
-const uniqueValidator = require('mongoose-unique-validator');
-const mongoosePaginate = require('mongoose-paginate-v2');
+const { DataTypes, Model } = require('sequelize');
+const sequelize = require('../loaders/sequelize');
 
-const userSchema = new Schema({
-  name: {
-    type: String,
-    required: [true, 'Name required']
-  },
-  lastName:   {
-    type: String,
-    required: [true, 'Last name required'],
-  },
-  email: {
-    type: String,
-    required: [true, 'Email required'],
-    unique: true,
-    index: true,
-  },
-  birthDate:{
-    type: Date,
-    default: Date.now,
+class User extends Model {}
+
+User.init({
+  // Model attributes are defined here
+  username: {
+    type: DataTypes.STRING(50),
+    allowNull: false,
+    unique: true
   },
   password: {
-    type: String,
-    required: [true, 'Password required'],
+    type: DataTypes.STRING(50),
+    allowNull: false
   },
-  role: {
-    type: String,
-    required: true,
-    default: 'USER_ROLE',
-    enum: ['USER_ROLE', 'ADMIN_ROLE']
+  name: {
+      type: DataTypes.STRING(50),
+      allowNull: true
   },
-  enabled: {
-    type: Boolean,
-    required: true,
-    default: true,
+  email: {
+      type: DataTypes.STRING(50),
+      allowNull: false,
+      unique: true
   }
-},
-{timestamps: true } // es una propiedad para que cuando se persista un dato en mongo ademas le agrega la fecha de creacion y modificacion 
-);
-userSchema.plugin(uniqueValidator, {message: ' already exists on the DB'})
-userSchema.plugin(mongoosePaginate);
-module.exports = mongoose.model('users', userSchema);
+}, {
+  // Other model options go here
+  sequelize, // We need to pass the connection instance
+  modelName: 'users' // We need to choose the model name
+});
+
+module.exports = User;
