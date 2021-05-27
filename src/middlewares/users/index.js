@@ -7,7 +7,6 @@ const {validJWT, hasRole} = require('../auth');
 
 
 const _nameRequired = check('name', 'Name required').not().isEmpty();
-const _lastNameRequired = check('lastName', 'Last Name required').not().isEmpty();
 const _emailRequired = check('email', 'Email required').not().isEmpty();
 const _emailType = check('email', 'Email is invalid').isEmail();
 const _emailExist = check('email').custom(
@@ -15,6 +14,14 @@ const _emailExist = check('email').custom(
         const userFound = await userService.findByEmail(email);
         if(userFound){
             throw new AppError('Email already exist', 400);
+        }
+    }
+);
+const _usernameExist = check('username').custom(
+    async (username = '') => {
+        const userFound = await userService.findByUsername(username);
+        if(userFound){
+            throw new AppError('Username already exist', 400);
         }
     }
 );
@@ -34,13 +41,12 @@ const postRequestValidations = [
     validJWT,
     hasRole(ADMIN_ROLE),
     _nameRequired,
-    _lastNameRequired,
     _emailRequired,
     _emailType,
     _emailExist,
+    _usernameExist,
     _passwordRequired,
     _roleValid,
-    _dateValid,
     validationResult
 ]
 
@@ -54,7 +60,6 @@ const _optionalEmailExist = check('email').optional().custom(
     }
 );
 const _idRequired = check('id').not().isEmpty();
-const _idIsMongoDB = check('id').isMongoId();       // verifica que sea un id del tipo de id que crea Mongo
 const _idExist = check('id').custom(
     async (id = '') => {
         const userFound = await userService.findById(id);
@@ -68,12 +73,11 @@ const putRequestValidations = [
     validJWT,
     hasRole(ADMIN_ROLE),
     _idRequired,
-    _idIsMongoDB,
     _idExist,
     _optionalEmailExist,
     _optionalEmailType,
     _roleValid,
-    _dateValid,
+    //_dateValid,
     validationResult
 ]
 
@@ -89,17 +93,19 @@ const _optionalFilterValid = check('filter').optional().custom(
 
 
 const getAllUsersRequestValidations = [
-    /*
     validJWT,
+    hasRole(ADMIN_ROLE),
+    _roleValid,
     _optionalFilterValid,
     validationResult
-    */
+    
 ]
 
 const getUserRequestValidations = [
     validJWT,
+    hasRole(ADMIN_ROLE),
+    _roleValid,
     _idRequired,
-    _idIsMongoDB,
     _idExist,
     validationResult
 ]
@@ -108,7 +114,7 @@ const deleteRequestValidations = [
     validJWT,
     hasRole(ADMIN_ROLE),
     _idRequired,
-    _idIsMongoDB,
+    _roleValid,
     _idExist,
     validationResult
 ]

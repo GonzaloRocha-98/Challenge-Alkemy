@@ -11,7 +11,7 @@ const logger = require('../loaders/logger');
 
 const getAllUsers = async (req, res, next) => {  //tambien se podría usar (req = Request, res = Response)
   try {
-    const user = await UserServices.findAll(req.query.filter, req.query.options);    
+    const user = await UserServices.findAll(req.query.filter);    
       res.json(new Success(user));
     
   } catch (error) {
@@ -91,8 +91,7 @@ const deleteUser = async (req, res, next) => {
   try {
     const id = req.params.id;
     //const { id } = req.params;
-    const user = await UserServices.findById(id);
-    user.remove();
+    const user = await UserServices.deleteById(id)
   
     res.json(new Success(user));
     

@@ -6,19 +6,19 @@ const config = require('../config/index')
 const logger = require('../loaders/logger')
 
 
-const login = async(email, password, next) => {
+const login = async(username, password, next) => {
     try {
-        //Email validation
-        const user = await userServices.findByEmail(email);
+        //Username validation
+        const user = await userServices.findByUsername(username)
 
         if(!user){
             throw new AppError('Authentication failed! Email / password incorrect.', 400)
         }
         //User Enable validation
-        if(!user.enabled){
-            throw new AppError('Authentication failed! User disabled.', 400)
+        //if(!user.enabled){
+          //  throw new AppError('Authentication failed! User disabled.', 400)
 
-        }
+        //}
         //Password validation
         const validPass =await bcrypt.compare(password, user.password);
 
@@ -26,12 +26,12 @@ const login = async(email, password, next) => {
             throw new AppError('Authentication failed! Email / password incorrect.', 400)
         }
         // Generate token
+        logger.info(user.id);
         const token = _encrypt(user.id);
 
         return {
             token,
-            user: user.name,
-            role: user.role
+            user: user.name
         }
 
     } catch (err) {
@@ -60,13 +60,13 @@ const validToken = async (token) =>{
         //Validate that a user exists in the db
         const user = await userServices.findById(id);
         if(!user){
-            throw new AppError('Authentication failed! Invalid Token', 401); 
+            throw new AppError('Authentication failed! Invalid Token #2', 401); 
         }
 
         //Validate that user is enable
-        if(!user.enabled){
-            throw new AppError('Authentication failed! User disabled', 401)
-        }
+        //if(!user.enabled){
+          //  throw new AppError('Authentication failed! User disabled', 401)
+        //}
         
         return user
     } catch (err) {

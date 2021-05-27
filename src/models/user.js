@@ -1,5 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../loaders/sequelize');
+const {ROLES} = require('../constants');
 
 class User extends Model {}
 
@@ -11,7 +12,7 @@ User.init({
     unique: true
   },
   password: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.STRING(100),
     allowNull: false
   },
   name: {
@@ -22,6 +23,10 @@ User.init({
       type: DataTypes.STRING(50),
       allowNull: false,
       unique: true
+  },
+  role:{
+    type: DataTypes.ENUM(ROLES),
+    defaultValue: 'USER_ROLE'
   }
 }, {
   // Other model options go here

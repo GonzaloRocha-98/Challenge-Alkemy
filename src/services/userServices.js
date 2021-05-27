@@ -2,14 +2,18 @@ const UserRepository = require('../repositories/userRepository');
 const repository = new UserRepository();
 
 
-const findAll = async(filter, options) =>{
+const findAll = async(filter) =>{
     //return await repository.findAllWithPagination(filter, options)
-    return await repository.findAll(filter, options)
+    return await repository.findAll(filter)
 }
 
 const findById = async(id) => {
     return await repository.findById(id);   
 };
+
+const findByUsername = async(username) =>{
+    return await repository.findByUsername(username)
+}
 
 const findByEmail = async(email) => {
     return await repository.findByEmail(email);   
@@ -30,6 +34,7 @@ const deleteById = async(id) =>{
 module.exports = {
     findAll,
     findById,
+    findByUsername,
     findByEmail,
     save,
     update,
