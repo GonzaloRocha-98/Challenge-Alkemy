@@ -12,4 +12,5 @@ INSERT INTO `bpbfrbpnvmxr5uhje8l9`.`genders` (`name`, `createdAt`, `updatedAt`) 
 INSERT INTO `bpbfrbpnvmxr5uhje8l9`.`genders` (`name`, `createdAt`, `updatedAt`) VALUES ('TERROR', '2021-05-27 05:40:58', '2021-05-27 05:40:58');
 INSERT INTO `bpbfrbpnvmxr5uhje8l9`.`genders` (`name`, `createdAt`, `updatedAt`) VALUES ('DOCUMENTARY_FILM', '2021-05-27 05:41:28', '2021-05-27 05:41:29');
 INSERT INTO `bpbfrbpnvmxr5uhje8l9`.`genders` (`name`, `createdAt`, `updatedAt`) VALUES ('ANIMATION', '2021-05-27 05:42:12', '2021-05-27 05:42:12');
+INSERT INTO `bpbfrbpnvmxr5uhje8l9`.`genders` (`name`, `createdAt`, `updatedAt`) VALUES ('ADVENTURE', '2021-05-30 13:35:00', '2021-05-30 13:35:01');
 

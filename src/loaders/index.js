@@ -8,7 +8,7 @@ module.exports = async () =>{
         await sequelize.authenticate();
         logger.info('Database connection has been established successfully.');
         //sequelize.sync({ alter: true });
-        sequelize.sync({force: true});
+        sequelize.sync({force: false});
 
         require('../models/Character');
         require('../models/Movie');

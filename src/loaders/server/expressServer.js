@@ -16,7 +16,8 @@ class ExpressServer{
         this.basePathUsers = `${config.api.prefix}/users`;
         this.basePathAuth = `${config.api.prefix}/auth`;
         this.basePathCharacters = `${config.api.prefix}/characters`;
-        this.basePathMovie = `${config.api.prefix}/movies`;
+        this.basePathMovies = `${config.api.prefix}/movies`;
+        this.basePathGenders = `${config.api.prefix}/genders`;
         this._middlewares();
         this._swaggerConfig();
         this._routes();
@@ -42,7 +43,8 @@ class ExpressServer{
         this.app.use(this.basePathUsers, require('../../routes/users'));
         this.app.use(this.basePathAuth, require('../../routes/auth'));
         this.app.use(this.basePathCharacters, require('../../routes/characters'));
-        this.app.use(this.basePathMovie, require('../../routes/movies'));
+        this.app.use(this.basePathMovies, require('../../routes/movies'));
+        this.app.use(this.basePathGenders, require('../../routes/genders'));
     }
 
     //.use es un middleware asi que va a ejecutar en medio de cuaquier cosa

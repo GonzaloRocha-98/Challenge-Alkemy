@@ -20,11 +20,10 @@ const findByTitle = async(title) =>{
 const save = async(movie) => {
     const genders = [];
     await movie.genders.forEach(async(genderName) => {
-        let g = await genderRepo.findByName(genderName);
-        logger.info(g.id)
-        genders.push(g.id)
-    })
-    logger.info(genders);
+        let {id} = await genderRepo.findByName(genderName);
+        logger.info(id)
+        genders.push(id)
+    });
     return await repository.save(movie,genders)
 }
 
