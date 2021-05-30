@@ -15,7 +15,7 @@ const postLoginRequestValidations = [
 ]
 
 const _emailType = check('email', 'Email is invalid').isEmail();
-const _emailExist = check('email').custom(
+const _emailNoExist = check('email').custom(
     async (email = '') => {
         const userFound = await userService.findByEmail(email);
         if(userFound){
@@ -23,7 +23,7 @@ const _emailExist = check('email').custom(
         }
     }
 );
-const _usernameExist = check('username').custom(
+const _usernameNoExist = check('username').custom(
     async (username = '') => {
         const userFound = await userService.findByUsername(username);
         if(userFound){
@@ -36,11 +36,11 @@ const _emailRequired = check('email', 'Email required').not().isEmpty();
 
 const postRegisterRequestValidations = [
     _usernameRequired,
-    _usernameExist,
+    _usernameNoExist,
     _passwordRequired,
     _emailRequired,
     _emailType,
-    _emailExist,
+    _emailNoExist,
     validationResult
 ]
 

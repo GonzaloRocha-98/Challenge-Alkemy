@@ -7,7 +7,7 @@ Character.init({
   // Model attributes are defined here
   image: {
     type: DataTypes.STRING(250),
-    allowNull: false
+    allowNull: true
   },
   name: {
     type: DataTypes.STRING(50),
@@ -33,3 +33,9 @@ Character.init({
 });
 
 module.exports = Character;
+
+const Movie = require('./Movie');
+
+Character.belongsToMany(Movie, {
+  through: 'characterAndMovies'
+})

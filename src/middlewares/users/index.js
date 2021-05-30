@@ -1,7 +1,7 @@
 const userService = require('../../services/userServices');
 const {check} = require('express-validator');
 const AppError = require('../../errors/appError');
-const {ROLES, ADMIN_ROLE, FILTERS} = require('../../constants/index');
+const {ROLES, ADMIN_ROLE, USER_FILTERS} = require('../../constants/index');
 const {validationResult} = require('../commons');
 const {validJWT, hasRole} = require('../auth');
 
@@ -9,7 +9,7 @@ const {validJWT, hasRole} = require('../auth');
 const _nameRequired = check('name', 'Name required').not().isEmpty();
 const _emailRequired = check('email', 'Email required').not().isEmpty();
 const _emailType = check('email', 'Email is invalid').isEmail();
-const _emailExist = check('email').custom(
+const _emailNoExist = check('email').custom(
     async (email = '') => {
         const userFound = await userService.findByEmail(email);
         if(userFound){
@@ -17,7 +17,7 @@ const _emailExist = check('email').custom(
         }
     }
 );
-const _usernameExist = check('username').custom(
+const _usernameNoExist = check('username').custom(
     async (username = '') => {
         const userFound = await userService.findByUsername(username);
         if(userFound){
@@ -34,7 +34,6 @@ const _roleValid = check('role').optional().custom(
         }
     }
 );
-const _dateValid = check('birthDate').optional().isDate('MM-DD-YYYY');
 
 
 const postRequestValidations = [
@@ -43,15 +42,15 @@ const postRequestValidations = [
     _nameRequired,
     _emailRequired,
     _emailType,
-    _emailExist,
-    _usernameExist,
+    _emailNoExist,
+    _usernameNoExist,
     _passwordRequired,
     _roleValid,
     validationResult
 ]
 
 const _optionalEmailType = check('email', 'Email is invalid').optional().isEmail();
-const _optionalEmailExist = check('email').optional().custom(
+const _optionalEmailNoExist = check('email').optional().custom(
     async (email = '') => {
         const userFound = await userService.findByEmail(email);
         if(userFound){
@@ -74,10 +73,9 @@ const putRequestValidations = [
     hasRole(ADMIN_ROLE),
     _idRequired,
     _idExist,
-    _optionalEmailExist,
+    _optionalEmailNoExist,
     _optionalEmailType,
     _roleValid,
-    //_dateValid,
     validationResult
 ]
 
@@ -86,7 +84,7 @@ const putRequestValidations = [
 const _optionalFilterValid = check('filter').optional().custom(
     async (filter = {}) => {
         const keys = Object.keys(filter);
-        if(!keys.every(e => FILTERS.includes(e))){
+        if(!keys.every(e => USER_FILTERS.includes(e))){
             throw new AppError('Some filter is invalid', 400)
         }
     });

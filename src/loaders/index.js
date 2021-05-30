@@ -8,7 +8,13 @@ module.exports = async () =>{
         await sequelize.authenticate();
         logger.info('Database connection has been established successfully.');
         //sequelize.sync({ alter: true });
-        sequelize.sync({force: false});
+        sequelize.sync({force: true});
+
+        require('../models/Character');
+        require('../models/Movie');
+        require('../models/Gender');
+        require('../models/User');
+
         console.log("All models were synchronized successfully.");
         const server = new ExpressServer();
         logger.info('Express loaded');

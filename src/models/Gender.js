@@ -11,7 +11,7 @@ Gender.init({
   },
   image: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   }
 }, {
   // Other model options go here
@@ -20,3 +20,9 @@ Gender.init({
 });
 
 module.exports = Gender;
+
+const Movie = require('./Movie');
+
+Gender.belongsToMany(Movie, {
+  through: 'movieAndGenders'
+});

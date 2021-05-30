@@ -1,13 +1,13 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../loaders/sequelize');
 
-class Film extends Model {}
+class Movie extends Model {}
 
-Film.init({
+Movie.init({
   // Model attributes are defined here
   image: {
     type: DataTypes.STRING(250),
-    allowNull: false
+    allowNull: true
   },
   title: {
     type: DataTypes.STRING(50),
@@ -18,14 +18,28 @@ Film.init({
     type: DataTypes.DATE,
     allowNull: false
   },
-  calificacion: {
-      type: DataTypes.DOUBLE(5),
+  calification: {
+      type: DataTypes.FLOAT(10,1),
       allowNull: false
+  },
+  typeMovie:{
+    type: DataTypes.ENUM('MOVIE', 'SERIE')
   }
 }, {
   // Other model options go here
   sequelize, // We need to pass the connection instance
-  modelName: 'filmes' // We need to choose the model name
+  modelName: 'movies' // We need to choose the model name
 });
 
-module.exports = Film;
+module.exports = Movie;
+
+const Gender = require('./Gender');
+const Character = require('./Character');
+
+Movie.belongsToMany(Gender, {
+    through: 'movieAndGenders'
+});
+
+Movie.belongsToMany(Character, {
+  through: 'characterAndMovies'
+});
