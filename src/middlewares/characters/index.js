@@ -1,9 +1,11 @@
 const CharacterService = require('../../services/characterServices');
-const {check} = require('express-validator');
+const MovieService = require('../../services/movieServices');
+const {check, query} = require('express-validator');
 const AppError = require('../../errors/appError');
 const {validationResult} = require('../commons');
 const {validJWT, hasRole} = require('../auth');
 const {CHARACTER_FILTERS, ADMIN_ROLE} = require('../../constants');
+const logger = require('../../loaders/logger');
 
 
 const _nameRequired = check('name', 'Name required').not().isEmpty();
@@ -18,6 +20,20 @@ const _characternameNoExist = check('name').custom(
 );
 const _optionalAgeType = check('age', 'Age has to be a number').optional().isInt();
 const _optionalWeightType = check('weight', 'Weight has to be a number').optional().isFloat();
+const _moviesRequired = check('movies', 'Movies required').not().isEmpty();
+const _moviesType = check('movies', 'The movies field has be an array ').isArray();
+
+const _moviesExist = check('movies').custom(
+    async(movies = '') =>{
+        for (let i = 0; i < movies.length; i++) {
+            let aux = await MovieService.findByTitle(movies[i]);
+            if(!aux){
+                throw new AppError(`Title ${movies[i]} not exist`, 400);
+            }
+            
+        }
+    }
+)
 //comprobar si es un tipo de imagen
 
 const postRequestValidations = [
@@ -27,10 +43,13 @@ validJWT,
     _optionalWeightType,
     _nameRequired,
     _characternameNoExist,
+    _moviesRequired,
+    _moviesType,
+    _moviesExist,
     validationResult
 ]
 
-const _idRequired = check('id').not().isEmpty();
+const _idRequired = check('id', 'Id required').not().isEmpty();
 const _idExist = check('id').custom(
     async (id = '') => {
         const characterFound = await CharacterService.findById(id);
@@ -47,6 +66,17 @@ const _optionalNameNoExist = check('name').optional().custom(
         }
     }
 );
+const _optionalMoviesType = check('movies', 'The movies field has be an array ').optional().isArray();
+const _optionalMoviesExist = check('movies').optional().custom(
+    async(movies = '') =>{
+        await movies.forEach(async(m)=>{
+            let movie = await MovieService.findByTitle(m);
+            if(!movie){
+                throw new AppError(`Title of movie ${m} not exist`)
+            }
+        })
+    }
+)
 
 const putRequestValidations = [
     validJWT,
@@ -56,23 +86,26 @@ const putRequestValidations = [
     _optionalNameNoExist,
     _optionalAgeType,
     _optionalWeightType,
+    _optionalMoviesType,
+    _optionalMoviesExist,
     validationResult
 ]
 
 
 
-const _optionalFilterValid = check('filter').optional().custom(
-    async (filter = {}) => {
-        const keys = Object.keys(filter);
+const _optionalQueryValid = query().optional().custom(
+    async (querys = {}) => {
+        const keys = Object.keys(querys);
         if(!keys.every(e => CHARACTER_FILTERS.includes(e))){
             throw new AppError('Some filter is invalid', 400)
         }
     });
 
 
+
 const getAllCharactersRequestValidations = [
     validJWT,
-    _optionalFilterValid,
+    _optionalQueryValid,
     validationResult
     
 ]

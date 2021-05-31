@@ -56,18 +56,8 @@ const putRequestValidations = [
 
 
 
-const _optionalFilterValid = check('filter').optional().custom(
-    async (filter = {}) => {
-        const keys = Object.keys(filter);
-        if(!keys.every(e => CHARACTER_FILTERS.includes(e))){
-            throw new AppError('Some filter is invalid', 400)
-        }
-    });
-
-
 const getAllGendersRequestValidations = [
     validJWT,
-    _optionalFilterValid,
     validationResult
     
 ]

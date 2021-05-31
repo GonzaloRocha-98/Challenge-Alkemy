@@ -18,13 +18,12 @@ const findByTitle = async(title) =>{
 }
 
 const save = async(movie) => {
-    const genders = [];
+    const gendersId = [];
     await movie.genders.forEach(async(genderName) => {
         let {id} = await genderRepo.findByName(genderName);
-        logger.info(id)
-        genders.push(id)
+        gendersId.push(id)
     });
-    return await repository.save(movie,genders)
+    return await repository.save(movie,gendersId)
 }
 
 const update = async(id, movie) =>{

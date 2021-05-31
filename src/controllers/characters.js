@@ -11,7 +11,7 @@ const logger = require('../loaders/logger');
 
 const getAllCharacter = async (req, res, next) => {  
   try {
-    const character = await CharacterServices.findAll(req.query.filter);    
+    const character = await CharacterServices.findAll(req.query);    
       res.json(new Success(character));
     
   } catch (error) {

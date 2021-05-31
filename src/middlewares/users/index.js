@@ -1,5 +1,5 @@
 const userService = require('../../services/userServices');
-const {check} = require('express-validator');
+const {check, query} = require('express-validator');
 const AppError = require('../../errors/appError');
 const {ROLES, ADMIN_ROLE, USER_FILTERS} = require('../../constants/index');
 const {validationResult} = require('../commons');
@@ -80,10 +80,9 @@ const putRequestValidations = [
 ]
 
 
-
-const _optionalFilterValid = check('filter').optional().custom(
-    async (filter = {}) => {
-        const keys = Object.keys(filter);
+const _optionalQueryValid = query().optional().custom(
+    async (querys = {}) => {
+        const keys = Object.keys(querys);
         if(!keys.every(e => USER_FILTERS.includes(e))){
             throw new AppError('Some filter is invalid', 400)
         }
@@ -94,7 +93,7 @@ const getAllUsersRequestValidations = [
     validJWT,
     hasRole(ADMIN_ROLE),
     _roleValid,
-    _optionalFilterValid,
+    _optionalQueryValid,
     validationResult
     
 ]

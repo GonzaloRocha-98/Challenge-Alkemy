@@ -11,7 +11,7 @@ const logger = require('../loaders/logger');
 
 const getAllUsers = async (req, res, next) => {  //tambien se podría usar (req = Request, res = Response)
   try {
-    const user = await UserServices.findAll(req.query.filter);    
+    const user = await UserServices.findAll(req.query);    
       res.json(new Success(user));
     
   } catch (error) {

@@ -1,13 +1,38 @@
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const logger = require('../loaders/logger');
+const {Op} = require('sequelize');
 class UserRepository{
     constructor(){
 
     };
 
-    async findAll(filters){
-        return await User.findAll({where : filters});
+    async findAll({username, name, email, role}){
+        // could be better
+        const where = {}
+        if(username){
+            where.name = {
+                 [Op.like] : `%${username}%`
+            }
+        };
+        if(name){
+            where.name = {
+                 [Op.like] : `%${name}%`
+            }
+        };
+
+        if(email){
+            where.email = {
+                [Op.like] : `%${email}%`
+            }
+        }
+
+        if(role){
+            where.role = role
+        }
+
+        return await User.findAll(where)
+
     }
 
     async findById(id){

@@ -1,5 +1,8 @@
+const logger = require('../loaders/logger');
 const CharacterRepository = require('../repositories/characterRepository');
 const repository = new CharacterRepository();
+const MovieRepository = require('../repositories/movieRepository');
+const repoMovie = new MovieRepository();
 
 
 const findAll = async(filter) =>{
@@ -15,7 +18,12 @@ const findByName = async(name) =>{
 }
 
 const save = async(character) => {
-    return await repository.save(character)
+    const moviesId = [];
+    await character.movies.forEach(async(movieTitle) => {
+        let {id} = await repoMovie.findByTitle(movieTitle);
+        moviesId.push(id)
+    });
+    return await repository.save(character,moviesId)
 }
 
 const update = async(id, character) =>{

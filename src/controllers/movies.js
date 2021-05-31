@@ -11,8 +11,8 @@ const logger = require('../loaders/logger');
 
 const getAllMovie = async (req, res, next) => {  
   try {
-    const movie = await MovieServices.findAll(req.query.filter);    
-      res.json(new Success(movie));
+    const movie = await MovieServices.findAll(req.query);    
+    res.json(new Success(movie));
     
   } catch (error) {
     next(error)

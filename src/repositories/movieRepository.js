@@ -1,12 +1,54 @@
 const Movie = require('../models/Movie');
 const logger = require('../loaders/logger');
+const Gender = require('../models/Gender');
+const {Op} = require('sequelize');
 class MovieRepository{
     constructor(){
 
     };
+    
+    async findAll({title, gender, order}){
 
-    async findAll(filters){
-        return await Movie.findAll({where : filters});
+        /*
+        return await Movie.findAll(
+            {
+                include:{
+                    model: Gender,
+                    where: {
+                        id: gender
+                    }
+                },
+                where: {
+                    title: { [Op.like] : `%${title}%`}
+                },
+                order: [['creationDate', order]]
+            }
+        );*/
+        // could be better
+        const filter = {};
+        if(title){
+            filter.where = {
+                title: { [Op.like] : `%${title}%`}
+            }
+        };
+
+        if(gender){
+            filter.include = {
+                model: Gender,
+                where: {
+                    id: gender
+                },
+                attributes : []
+            }
+        }
+        filter.attributes = ['title', 'image', 'creationDate'];
+
+        if(order){
+            filter.order = [['creationDate', order]]
+        }
+
+        return await Movie.findAll(filter)
+
     }
 
     async findById(id){
@@ -17,9 +59,9 @@ class MovieRepository{
         return await Movie.findOne({where: {title}})
     }
     
-    async save(movie, genders){
+    async save(movie, gendersId){
         let m = await Movie.create(movie);
-        await m.addGender(genders);
+        await m.addGender(gendersId);
         return m
     }
 
