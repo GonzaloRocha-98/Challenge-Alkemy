@@ -1,5 +1,7 @@
 const GenderRepository = require('../repositories/genderRepository');
 const repository = new GenderRepository();
+const ImageRepository = require('../repositories/imageRepository');
+const repoImage = new ImageRepository();
 
 
 const findAll = async(filter) =>{
@@ -23,8 +25,13 @@ const update = async(id, gender) =>{
 }
 
 const deleteById = async(id) =>{
+    const user = await findById(id);
+    if(user.image){
+        await repoImage.deleteImage(user.image);
+    }
     return await repository.delete(id)
 }
+
 
 module.exports = {
     findAll,

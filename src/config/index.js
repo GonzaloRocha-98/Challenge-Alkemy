@@ -32,5 +32,10 @@ module.exports = {
     auth:{
         secret: process.env.AUTH_SECRET,
         ttl: process.env.AUTH_TTL
+    },
+    cloud: {
+        idAccessKey : process.env.CLOUDINARY_API_KEY,
+        secretAccessKey: process.env.CLOUDINARY_API_SECRET,
+        bucket_name: process.env.CLOUDINARY_CLOUD_NAME
     }
 }

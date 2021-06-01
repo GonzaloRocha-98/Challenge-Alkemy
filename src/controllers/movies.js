@@ -2,6 +2,8 @@ const express = require('express');
 const MovieServices = require('../services/movieServices')
 const Success = require('../handlers/successHandler')
 const logger = require('../loaders/logger');
+const ImageServices = require('../services/imageServices');
+
 
 /**
  * 
@@ -99,11 +101,20 @@ const deleteMovie = async (req, res, next) => {
   }
 };
 
+const uploadImageMovie = async(req, res, next) =>{
+  try {
+    res.json(new Success(await ImageServices.uploadMovieImage(req.file, req.body.id), 200))
+  } catch (error) {
+    next(error)
+  }
+}
+
 module.exports = {
     getAllMovie,
     createMovie,
     getMovie,
     updateMovie,
     deleteMovie,
+    uploadImageMovie
 }
  

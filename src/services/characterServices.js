@@ -3,6 +3,8 @@ const CharacterRepository = require('../repositories/characterRepository');
 const repository = new CharacterRepository();
 const MovieRepository = require('../repositories/movieRepository');
 const repoMovie = new MovieRepository();
+const ImageRepository = require('../repositories/imageRepository');
+const repoImage = new ImageRepository();
 
 
 const findAll = async(filter) =>{
@@ -31,6 +33,10 @@ const update = async(id, character) =>{
 }
 
 const deleteById = async(id) =>{
+    const character = await findById(id);
+    if(character.movie){
+        await repoImage.deleteImage(character.image);
+    }
     return await repository.delete(id)
 }
 

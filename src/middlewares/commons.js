@@ -1,5 +1,7 @@
 const {validationResult} = require('express-validator');
-const AppError = require('../errors/appError')
+const AppError = require('../errors/appError');
+const multer  = require('multer');
+const path = require('path');
 
 const _validationResult = (req, res, next)=> {
     const errors = validationResult(req);
@@ -9,6 +11,19 @@ const _validationResult = (req, res, next)=> {
     next();                     //para que siga el flujo de la app
 }
 
+const upload = multer({
+    storage: multer.diskStorage({}),
+    fileFilter: (req, file, cb) => {
+      const fileTypes = /jpg|jpeg|png/; 
+      if (!fileTypes.test(path.extname(file.originalname))) {
+        cb(new Error("File type is not supported"), false);
+        return;
+      }
+      cb(null, true);
+    },
+  });
+
 module.exports = {
-    validationResult: _validationResult
+    validationResult: _validationResult,
+    upload
 }

@@ -3,6 +3,8 @@ const repository = new MovieRepository();
 const GenderRepository = require('../repositories/genderRepository');
 const logger = require('../loaders/logger');
 const genderRepo = new GenderRepository();  
+const ImageRepository = require('../repositories/imageRepository');
+const repoImage = new ImageRepository();
 
 
 const findAll = async(filter) =>{
@@ -31,8 +33,13 @@ const update = async(id, movie) =>{
 }
 
 const deleteById = async(id) =>{
+    const movie = await findById(id);
+    if(movie.image){
+        await repoImage.deleteImage(movie.image);
+    }
     return await repository.delete(id)
 }
+
 
 module.exports = {
     findAll,

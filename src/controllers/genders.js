@@ -2,6 +2,7 @@ const express = require('express');
 const GenderServices = require('../services/genderServices')
 const Success = require('../handlers/successHandler')
 const logger = require('../loaders/logger');
+const ImageService = require('../services/imageServices');
 
 /**
  * 
@@ -98,6 +99,13 @@ const deleteGender = async (req, res, next) => {
     next(error)
   }
 };
+const uploadImageGender = async(req, res, next) =>{
+  try {
+    res.json(new Success(await ImageService.uploadGenderImage(req.file, req.body.id), 200))
+  } catch (error) {
+    next(error)
+  }
+}
 
 module.exports = {
     getAllGender,
@@ -105,5 +113,6 @@ module.exports = {
     getGender,
     updateGender,
     deleteGender,
+    uploadImageGender
 }
  

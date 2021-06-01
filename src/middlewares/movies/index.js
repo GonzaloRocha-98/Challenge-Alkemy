@@ -2,10 +2,11 @@ const MovieService = require('../../services/movieServices');
 const GenderService = require('../../services/genderServices');
 const {check, query} = require('express-validator');
 const AppError = require('../../errors/appError');
-const {validationResult} = require('../commons');
+const {validationResult, upload} = require('../commons');
 const {validJWT, hasRole} = require('../auth');
 const {MOVIE_FILTERS, ADMIN_ROLE} = require('../../constants');
 const logger = require('../../loaders/logger');
+
 
 
 const _titleRequired = check('title', 'Title required').not().isEmpty();
@@ -117,10 +118,22 @@ const deleteRequestValidations = [
     validationResult
 ]
 
+
+
+const postImageRequestValidations = [
+    validJWT,
+    hasRole(ADMIN_ROLE),
+    upload.single('image'),
+    _idRequired,
+    _idExist,
+    validationResult
+]
+
 module.exports = {
     postRequestValidations,
     putRequestValidations,
     getAllMoviesRequestValidations,
     getMovieRequestValidations,
-    deleteRequestValidations
+    deleteRequestValidations,
+    postImageRequestValidations
 }

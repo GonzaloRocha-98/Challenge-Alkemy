@@ -1,7 +1,7 @@
 const GenderService = require('../../services/genderServices');
 const {check} = require('express-validator');
 const AppError = require('../../errors/appError');
-const {validationResult} = require('../commons');
+const {validationResult, upload} = require('../commons');
 const {validJWT, hasRole} = require('../auth');
 const {GENDER_FILTERS, ADMIN_ROLE} = require('../../constants');
 
@@ -77,10 +77,20 @@ const deleteRequestValidations = [
     validationResult
 ]
 
+const postImageRequestValidations = [
+    validJWT,
+    hasRole(ADMIN_ROLE),
+    upload.single('image'),
+    _idRequired,
+    _idExist,
+    validationResult
+]
+
 module.exports = {
     postRequestValidations,
     putRequestValidations,
     getAllGendersRequestValidations,
     getGenderRequestValidations,
-    deleteRequestValidations
+    deleteRequestValidations,
+    postImageRequestValidations
 }

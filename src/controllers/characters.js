@@ -2,6 +2,8 @@ const express = require('express');
 const CharacterServices = require('../services/characterServices')
 const Success = require('../handlers/successHandler')
 const logger = require('../loaders/logger');
+const ImageService = require('../services/imageServices');
+
 
 /**
  * 
@@ -30,6 +32,7 @@ const getAllCharacter = async (req, res, next) => {
 const createCharacter = async (req, res, next) => {
   try {
     let character = req.body;
+    
     character = await CharacterServices.save(character);
 
     res.status(201).json(new Success(character));
@@ -99,11 +102,20 @@ const deleteCharacter = async (req, res, next) => {
   }
 };
 
+const uploadImageCharacter = async(req, res, next) =>{
+    try {
+      res.json(new Success(await ImageService.uploadCharacterImage(req.file, req.body.id), 200))
+    } catch (error) {
+      next(error)
+    }
+}
+
 module.exports = {
     getAllCharacter,
     createCharacter,
     getCharacter,
     updateCharacter,
     deleteCharacter,
+    uploadImageCharacter
 }
  

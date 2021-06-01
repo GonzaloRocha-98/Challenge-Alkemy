@@ -48,8 +48,8 @@ class CharacterRepository{
         return await Character.findOne({where: {name}})
     }
     
-    async save(user, moviesId){
-        let c = await Character.create(user);
+    async save(character, moviesId){
+        let c = await Character.create(character);
         await c.addMovie(moviesId);
         return c
     }

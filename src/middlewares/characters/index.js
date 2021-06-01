@@ -2,7 +2,7 @@ const CharacterService = require('../../services/characterServices');
 const MovieService = require('../../services/movieServices');
 const {check, query} = require('express-validator');
 const AppError = require('../../errors/appError');
-const {validationResult} = require('../commons');
+const {validationResult, upload} = require('../commons');
 const {validJWT, hasRole} = require('../auth');
 const {CHARACTER_FILTERS, ADMIN_ROLE} = require('../../constants');
 const logger = require('../../loaders/logger');
@@ -125,10 +125,21 @@ const deleteRequestValidations = [
     validationResult
 ]
 
+
+const postImageRequestValidations = [
+    validJWT,
+    hasRole(ADMIN_ROLE),
+    upload.single('image'),
+    _idRequired,
+    _idExist,
+    validationResult
+]
+
 module.exports = {
     postRequestValidations,
     putRequestValidations,
     getAllCharactersRequestValidations,
     getCharacterRequestValidations,
-    deleteRequestValidations
+    deleteRequestValidations,
+    postImageRequestValidations
 }
