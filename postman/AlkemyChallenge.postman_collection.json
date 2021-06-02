@@ -12,6 +12,90 @@
 					"name": "Register User",
 					"item": [
 						{
+							"name": "Create User - Succes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});\r",
+											"pm.test(\"Status code is not 400\", function () {\r",
+											"    pm.response.to.not.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 5000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a json\"), function() {\r",
+											"    pm.response.to.be.json;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Response have correct properties\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('status');\r",
+											"    pm.expect(jsonData.status).to.be.an('string');\r",
+											"    pm.expect(jsonData).to.have.property('data');\r",
+											"    pm.expect(jsonData.data).to.have.property('username');\r",
+											"    pm.expect(jsonData.data.username).to.be.an('string');\r",
+											"    pm.expect(jsonData.data).to.have.property('email');\r",
+											"    pm.expect(jsonData.data.email).to.be.an('string');\r",
+											"    pm.expect(jsonData.data).to.have.property('password');\r",
+											"    pm.expect(jsonData.data).to.have.property('id');\r",
+											"    pm.expect(jsonData.data.id).to.be.an('number');\r",
+											"    pm.expect(jsonData.data).to.have.property('name');\r",
+											"    pm.expect(jsonData.data.name).to.be.an('string');   \r",
+											"    pm.environment.set(\"userId\", jsonData.data.id);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"randomNumber\", Math.random());"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"gonzalo{{randomNumber}}\",\r\n    \"password\": \"gonzalo\",\r\n    \"name\": \"gonzalo\",\r\n    \"email\": \"gonzalo{{randomNumber}}@hotmail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{basepath}}/auth/register",
+									"host": [
+										"{{basepath}}"
+									],
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "Create User - Failure Email exists",
 							"event": [
 								{
@@ -118,90 +202,6 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"username\": \"gonzalo\",\r\n    \"password\": \"gonzalo\",\r\n    \"name\": \"gonzalo\",\r\n    \"email\": \"gonzalo{{randomNumber}}@hotmail.com\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{basepath}}/auth/register",
-									"host": [
-										"{{basepath}}"
-									],
-									"path": [
-										"auth",
-										"register"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create User - Succes",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 201\", function () {\r",
-											"    pm.response.to.have.status(201);\r",
-											"});\r",
-											"pm.test(\"Status code is not 400\", function () {\r",
-											"    pm.response.to.not.have.status(400);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response time is less than 5000ms\", function () {\r",
-											"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response is a json\"), function() {\r",
-											"    pm.response.to.be.json;\r",
-											"}\r",
-											"\r",
-											"pm.test(\"Response have correct properties\", function () {\r",
-											"    var jsonData = pm.response.json();\r",
-											"    pm.expect(jsonData).to.have.property('status');\r",
-											"    pm.expect(jsonData.status).to.be.an('string');\r",
-											"    pm.expect(jsonData).to.have.property('data');\r",
-											"    pm.expect(jsonData.data).to.have.property('username');\r",
-											"    pm.expect(jsonData.data.username).to.be.an('string');\r",
-											"    pm.expect(jsonData.data).to.have.property('email');\r",
-											"    pm.expect(jsonData.data.email).to.be.an('string');\r",
-											"    pm.expect(jsonData.data).to.have.property('password');\r",
-											"    pm.expect(jsonData.data).to.have.property('id');\r",
-											"    pm.expect(jsonData.data.id).to.be.an('number');\r",
-											"    pm.expect(jsonData.data).to.have.property('name');\r",
-											"    pm.expect(jsonData.data.name).to.be.an('string');   \r",
-											"    pm.environment.set(\"userId\", jsonData.data.id);\r",
-											"});\r",
-											""
-										],
-										"type": "text/javascript"
-									}
-								},
-								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											"pm.collectionVariables.set(\"randomNumber\", Math.random());"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "{{token}}",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"username\": \"gonzalo{{randomNumber}}\",\r\n    \"password\": \"gonzalo\",\r\n    \"name\": \"gonzalo\",\r\n    \"email\": \"gonzalo{{randomNumber}}@hotmail.com\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1629,7 +1629,12 @@
 								}
 							},
 							"response": []
-						},
+						}
+					]
+				},
+				{
+					"name": "Upload Image",
+					"item": [
 						{
 							"name": "Upload Image - Success",
 							"event": [
@@ -2791,6 +2796,283 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Association with Character",
+					"item": [
+						{
+							"name": "Associate Succes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response time is less than 5000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a json\"), function() {\r",
+											"    pm.response.to.be.json;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Response have correct properties\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('status');\r",
+											"    pm.expect(jsonData.status).to.equals('OK')\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{basepath}}/movies/:idMovie/character/:idCharacter",
+									"host": [
+										"{{basepath}}"
+									],
+									"path": [
+										"movies",
+										":idMovie",
+										"character",
+										":idCharacter"
+									],
+									"variable": [
+										{
+											"key": "idMovie",
+											"value": "12"
+										},
+										{
+											"key": "idCharacter",
+											"value": "46"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Associate Succes - Failure IdMovie no exist",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response time is less than 5000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a json\"), function() {\r",
+											"    pm.response.to.be.json;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Response have correct properties\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('error');\r",
+											"    pm.expect(jsonData.error).to.have.property('code');\r",
+											"    pm.expect(jsonData.error.code).to.be.an('number');\r",
+											"    pm.expect(jsonData.error).to.have.property('message');\r",
+											"    pm.expect(jsonData.error.message).to.be.an('string');\r",
+											"    pm.expect(jsonData.error).to.have.property('data');\r",
+											"    pm.expect(jsonData.error.data).to.be.an('array');\r",
+											"    pm.expect(jsonData.error).to.have.not.empty;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{basepath}}/movies/:idMovie/character/:idCharacter",
+									"host": [
+										"{{basepath}}"
+									],
+									"path": [
+										"movies",
+										":idMovie",
+										"character",
+										":idCharacter"
+									],
+									"variable": [
+										{
+											"key": "idMovie",
+											"value": "122a"
+										},
+										{
+											"key": "idCharacter",
+											"value": "46"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Associate Succes - Failure IdCharacter no exist",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response time is less than 5000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a json\"), function() {\r",
+											"    pm.response.to.be.json;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Response have correct properties\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('error');\r",
+											"    pm.expect(jsonData.error).to.have.property('code');\r",
+											"    pm.expect(jsonData.error.code).to.be.an('number');\r",
+											"    pm.expect(jsonData.error).to.have.property('message');\r",
+											"    pm.expect(jsonData.error.message).to.be.an('string');\r",
+											"    pm.expect(jsonData.error).to.have.property('data');\r",
+											"    pm.expect(jsonData.error.data).to.be.an('array');\r",
+											"    pm.expect(jsonData.error).to.have.not.empty;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{basepath}}/movies/:idMovie/character/:idCharacter",
+									"host": [
+										"{{basepath}}"
+									],
+									"path": [
+										"movies",
+										":idMovie",
+										"character",
+										":idCharacter"
+									],
+									"variable": [
+										{
+											"key": "idMovie",
+											"value": "12"
+										},
+										{
+											"key": "idCharacter",
+											"value": "464d"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Associate Succes - Failure Invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response time is less than 5000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a json\"), function() {\r",
+											"    pm.response.to.be.json;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Response have correct properties\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('error');\r",
+											"    pm.expect(jsonData.error).to.have.property('code');\r",
+											"    pm.expect(jsonData.error.code).to.be.an('number');\r",
+											"    pm.expect(jsonData.error).to.have.property('message');\r",
+											"    pm.expect(jsonData.error.message).to.be.an('string');\r",
+											"    pm.expect(jsonData.error).to.have.not.empty;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}adsd",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{basepath}}/movies/:idMovie/character/:idCharacter",
+									"host": [
+										"{{basepath}}"
+									],
+									"path": [
+										"movies",
+										":idMovie",
+										"character",
+										":idCharacter"
+									],
+									"variable": [
+										{
+											"key": "idMovie",
+											"value": "12"
+										},
+										{
+											"key": "idCharacter",
+											"value": "46"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -3017,7 +3299,12 @@
 								}
 							},
 							"response": []
-						},
+						}
+					]
+				},
+				{
+					"name": "Upload Image",
+					"item": [
 						{
 							"name": "Upload Image - Success",
 							"event": [
@@ -3077,88 +3364,6 @@
 											"key": "image",
 											"type": "file",
 											"src": "/C:/Users/COMPAQ-P21/Downloads/002dfc90f872de4cce739a3ff979956c.jpg"
-										},
-										{
-											"key": "id",
-											"value": "{{characterId}}",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{basepath}}/characters/image",
-									"host": [
-										"{{basepath}}"
-									],
-									"path": [
-										"characters",
-										"image"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Upload Image - Failure type file not supported",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Status code is 500\", function () {\r",
-											"    pm.response.to.have.status(500);\r",
-											"});\r",
-											"pm.test(\"Status code is not 200\", function () {\r",
-											"    pm.response.to.not.have.status(200);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response time is less than 10000ms\", function () {\r",
-											"    pm.expect(pm.response.responseTime).to.be.below(10000);\r",
-											"});\r",
-											"\r",
-											"pm.test(\"Response is a json\"), function() {\r",
-											"    pm.response.to.be.json;\r",
-											"}\r",
-											"\r",
-											"pm.test(\"Response have correct properties\", function () {\r",
-											"    var jsonData = pm.response.json();\r",
-											"    pm.expect(jsonData).to.have.property('error');\r",
-											"    pm.expect(jsonData.error).to.have.property('code');\r",
-											"    pm.expect(jsonData.error.code).to.be.an('number');\r",
-											"    pm.expect(jsonData.error).to.have.property('message');\r",
-											"    pm.expect(jsonData.error.message).to.be.an('string');\r",
-											"});\r",
-											""
-										],
-										"type": "text/javascript"
-									}
-								},
-								{
-									"listen": "prerequest",
-									"script": {
-										"exec": [
-											"pm.collectionVariables.set(\"randomNumber\", Math.random());"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Authorization",
-										"value": "{{token}}",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "image",
-											"type": "file",
-											"src": "/C:/Users/COMPAQ-P21/Downloads/Parte2Grupo14.pdf"
 										},
 										{
 											"key": "id",
@@ -3245,6 +3450,88 @@
 										{
 											"key": "id",
 											"value": "1321323",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{basepath}}/characters/image",
+									"host": [
+										"{{basepath}}"
+									],
+									"path": [
+										"characters",
+										"image"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Upload Image - Failure type file not supported",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 500\", function () {\r",
+											"    pm.response.to.have.status(500);\r",
+											"});\r",
+											"pm.test(\"Status code is not 200\", function () {\r",
+											"    pm.response.to.not.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 10000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(10000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a json\"), function() {\r",
+											"    pm.response.to.be.json;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Response have correct properties\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('error');\r",
+											"    pm.expect(jsonData.error).to.have.property('code');\r",
+											"    pm.expect(jsonData.error.code).to.be.an('number');\r",
+											"    pm.expect(jsonData.error).to.have.property('message');\r",
+											"    pm.expect(jsonData.error.message).to.be.an('string');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.collectionVariables.set(\"randomNumber\", Math.random());"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image",
+											"type": "file",
+											"src": "/C:/Users/COMPAQ-P21/Downloads/Parte2Grupo14.pdf"
+										},
+										{
+											"key": "id",
+											"value": "{{characterId}}",
 											"type": "text"
 										}
 									]
@@ -4278,6 +4565,283 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "Association with Movie",
+					"item": [
+						{
+							"name": "Associate Succes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response time is less than 5000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a json\"), function() {\r",
+											"    pm.response.to.be.json;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Response have correct properties\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('status');\r",
+											"    pm.expect(jsonData.status).to.equals('OK')\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{basepath}}/characters/:idCharacter/movie/:idMovie",
+									"host": [
+										"{{basepath}}"
+									],
+									"path": [
+										"characters",
+										":idCharacter",
+										"movie",
+										":idMovie"
+									],
+									"variable": [
+										{
+											"key": "idCharacter",
+											"value": "46"
+										},
+										{
+											"key": "idMovie",
+											"value": "12"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Associate Succes - Failure IdMovie no exist",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response time is less than 5000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a json\"), function() {\r",
+											"    pm.response.to.be.json;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Response have correct properties\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('error');\r",
+											"    pm.expect(jsonData.error).to.have.property('code');\r",
+											"    pm.expect(jsonData.error.code).to.be.an('number');\r",
+											"    pm.expect(jsonData.error).to.have.property('message');\r",
+											"    pm.expect(jsonData.error.message).to.be.an('string');\r",
+											"    pm.expect(jsonData.error).to.have.property('data');\r",
+											"    pm.expect(jsonData.error.data).to.be.an('array');\r",
+											"    pm.expect(jsonData.error).to.have.not.empty;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{basepath}}/characters/:idCharacter/movie/:idMovie",
+									"host": [
+										"{{basepath}}"
+									],
+									"path": [
+										"characters",
+										":idCharacter",
+										"movie",
+										":idMovie"
+									],
+									"variable": [
+										{
+											"key": "idCharacter",
+											"value": "46"
+										},
+										{
+											"key": "idMovie",
+											"value": "12awds"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Associate Succes - Failure IdCharacter no exist",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response time is less than 5000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a json\"), function() {\r",
+											"    pm.response.to.be.json;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Response have correct properties\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('error');\r",
+											"    pm.expect(jsonData.error).to.have.property('code');\r",
+											"    pm.expect(jsonData.error.code).to.be.an('number');\r",
+											"    pm.expect(jsonData.error).to.have.property('message');\r",
+											"    pm.expect(jsonData.error.message).to.be.an('string');\r",
+											"    pm.expect(jsonData.error).to.have.property('data');\r",
+											"    pm.expect(jsonData.error.data).to.be.an('array');\r",
+											"    pm.expect(jsonData.error).to.have.not.empty;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{basepath}}/characters/:idCharacter/movie/:idMovie",
+									"host": [
+										"{{basepath}}"
+									],
+									"path": [
+										"characters",
+										":idCharacter",
+										"movie",
+										":idMovie"
+									],
+									"variable": [
+										{
+											"key": "idCharacter",
+											"value": "aadws"
+										},
+										{
+											"key": "idMovie",
+											"value": "12"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Associate Succes - Failure Invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"\r",
+											"pm.test(\"Response time is less than 5000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(5000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response is a json\"), function() {\r",
+											"    pm.response.to.be.json;\r",
+											"}\r",
+											"\r",
+											"pm.test(\"Response have correct properties\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('error');\r",
+											"    pm.expect(jsonData.error).to.have.property('code');\r",
+											"    pm.expect(jsonData.error.code).to.be.an('number');\r",
+											"    pm.expect(jsonData.error).to.have.property('message');\r",
+											"    pm.expect(jsonData.error.message).to.be.an('string');\r",
+											"    pm.expect(jsonData.error).to.have.not.empty;\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}adsd",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{basepath}}/characters/:idCharacter/movie/:idMovie",
+									"host": [
+										"{{basepath}}"
+									],
+									"path": [
+										"characters",
+										":idCharacter",
+										"movie",
+										":idMovie"
+									],
+									"variable": [
+										{
+											"key": "idCharacter",
+											"value": "46"
+										},
+										{
+											"key": "idMovie",
+											"value": "12"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -4433,7 +4997,12 @@
 								}
 							},
 							"response": []
-						},
+						}
+					]
+				},
+				{
+					"name": "Upload Image",
+					"item": [
 						{
 							"name": "Upload Image - Success",
 							"event": [

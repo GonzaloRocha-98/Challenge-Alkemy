@@ -11,6 +11,7 @@
 - multer (used to handle the images
 - mysql2 (MySQL client for Node.js
 - sequelize(ORM)
+- sendgrid/mail (to sent mails)
 - morgan (HTTP request logger middleware)
 - dotenv (loads environment variables)
 - winston (loggers)
