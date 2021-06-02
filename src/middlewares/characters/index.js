@@ -48,7 +48,6 @@ validJWT,
     _moviesExist,
     validationResult
 ]
-
 const _idRequired = check('id', 'Id required').not().isEmpty();
 const _idExist = check('id').custom(
     async (id = '') => {
@@ -135,11 +134,45 @@ const postImageRequestValidations = [
     validationResult
 ]
 
+//Agrego el character al req para no volver a hacer la consultar en el controller(solo actualizado en el metodo updaeAssocMovieCharacter)
+const _idCharacterRequired = check('idCharacter', 'Id required').not().isEmpty();
+const _idCharacterExist = check('idCharacter').custom(
+    async (id = '', {req}) => {
+        const characterFound = await CharacterService.findById(id);
+        if(!characterFound){
+            throw new AppError('The id is not exist', 400);
+        }
+        req.character = characterFound;
+    }
+);
+
+const _idMovieRequired = check('idMovie', 'Id Movie required').not().isEmpty();
+const _idMovieExist = check('idMovie').custom(
+    async (id = '', {req}) => {
+        const movieFound = await MovieService.findById(id);
+        if(!movieFound){
+            throw new AppError('The dd Movie is not exist', 400);
+        }
+        req.movie = movieFound;
+    }
+);
+
+const putAssocRequestValidations = [
+    validJWT,
+    hasRole(ADMIN_ROLE),
+    _idCharacterRequired,
+    _idCharacterExist,
+    _idMovieRequired,
+    _idMovieExist,
+    validationResult
+]
+
 module.exports = {
     postRequestValidations,
     putRequestValidations,
     getAllCharactersRequestValidations,
     getCharacterRequestValidations,
     deleteRequestValidations,
-    postImageRequestValidations
+    postImageRequestValidations,
+    putAssocRequestValidations
 }

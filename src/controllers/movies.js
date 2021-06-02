@@ -73,7 +73,7 @@ const updateMovie = async (req, res, next) => {
 const getMovie = async (req, res, next) => {
   try {
     let {id} = req.params;
-    const movie = await MovieServices.findById(id)
+    const movie = await MovieServices.findByIdWithCharacters(id)
     res.json(new Success(movie));
     
   } catch (error) {
@@ -109,12 +109,21 @@ const uploadImageMovie = async(req, res, next) =>{
   }
 }
 
+const assocCharacter = async(req, res, next) =>{
+  try {
+      res.json(new Success(await MovieServices.assocCharacter(req.movie, req.character)))
+  } catch (error) {
+      next(error)
+  }
+}
+
 module.exports = {
     getAllMovie,
     createMovie,
     getMovie,
     updateMovie,
     deleteMovie,
-    uploadImageMovie
+    uploadImageMovie,
+    assocCharacter
 }
  

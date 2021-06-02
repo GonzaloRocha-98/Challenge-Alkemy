@@ -15,6 +15,10 @@ const findById = async(id) => {
     return await repository.findById(id);   
 };
 
+const findByIdWithMovies = async(id) => {
+    return await repository.findByIdWithMovies(id)
+}
+
 const findByName = async(name) =>{
     return await repository.findByName(name)
 }
@@ -40,11 +44,17 @@ const deleteById = async(id) =>{
     return await repository.delete(id)
 }
 
+const assocMovie = async(character, movie) =>{
+    await character.addMovie(movie);
+}
+
 module.exports = {
     findAll,
     findById,
     findByName,
     save,
     update,
-    deleteById
+    deleteById,
+    assocMovie,
+    findByIdWithMovies
 }

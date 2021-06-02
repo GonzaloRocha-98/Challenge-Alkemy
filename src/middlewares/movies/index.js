@@ -1,5 +1,6 @@
 const MovieService = require('../../services/movieServices');
 const GenderService = require('../../services/genderServices');
+const CharacterService = require('../../services/characterServices')
 const {check, query} = require('express-validator');
 const AppError = require('../../errors/appError');
 const {validationResult, upload} = require('../commons');
@@ -129,11 +130,45 @@ const postImageRequestValidations = [
     validationResult
 ]
 
+const _idMovieRequired = check('idMovie', 'Id required').not().isEmpty();
+const _idMovieExist = check('idMovie').custom(
+    async (id = '', {req}) => {
+        const movieFound = await MovieService.findById(id);
+        if(!movieFound){
+            throw new AppError('The id is not exist', 400);
+        }
+        req.movie = movieFound;
+    }
+);
+
+const _idCharacterRequired = check('idCharacter', 'Id Character required').not().isEmpty();
+const _idCharacterExist = check('idCharacter').custom(
+    async (id = '', {req}) => {
+        const characterFound = await CharacterService.findById(id);
+        if(!characterFound){
+            throw new AppError('The dd Character is not exist', 400);
+        }
+        req.character = characterFound;
+    }
+);
+
+const putAssocRequestValidations = [
+    validJWT,
+    hasRole(ADMIN_ROLE),
+    _idCharacterRequired,
+    _idCharacterExist,
+    _idMovieRequired,
+    _idMovieExist,
+    validationResult
+]
+
+
 module.exports = {
     postRequestValidations,
     putRequestValidations,
     getAllMoviesRequestValidations,
     getMovieRequestValidations,
     deleteRequestValidations,
-    postImageRequestValidations
+    postImageRequestValidations,
+    putAssocRequestValidations
 }

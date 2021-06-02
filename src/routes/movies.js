@@ -5,7 +5,8 @@ const {
     updateMovie, 
     getMovie, 
     deleteMovie,
-    uploadImageMovie
+    uploadImageMovie,
+    assocCharacter
     } = require('../controllers/Movies');
 const router = Router();
 const {postRequestValidations, 
@@ -13,7 +14,8 @@ const {postRequestValidations,
         getAllMoviesRequestValidations, 
         getMovieRequestValidations,
         deleteRequestValidations,
-        postImageRequestValidations
+        postImageRequestValidations,
+        putAssocRequestValidations
         } = require('../middlewares/Movies/index');
 
 router.get('/', getAllMoviesRequestValidations, getAllMovie);
@@ -21,6 +23,7 @@ router.post('/', postRequestValidations, createMovie);
 router.put('/:id', putRequestValidations, updateMovie);
 router.get('/:id', getMovieRequestValidations, getMovie);
 router.delete('/:id', deleteRequestValidations, deleteMovie);
-router.post('/image', postImageRequestValidations, uploadImageMovie)
+router.post('/image', postImageRequestValidations, uploadImageMovie);
+router.put('/:idMovie/character/:idCharacter', putAssocRequestValidations, assocCharacter);
 
 module.exports = router;

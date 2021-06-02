@@ -43,6 +43,16 @@ class CharacterRepository{
     async findById(id){
         return await Character.findByPk(id);
     }
+
+    async findByIdWithMovies(id){
+        return await Character.findByPk(id,{
+            include: {
+                model: Movie,
+                attributes: ['id', 'title', 'image']
+            },
+            attributes: ['id','image','name', 'age', 'weight', 'history']
+        });
+    }
     
     async findByName(name){
         return await Character.findOne({where: {name}})

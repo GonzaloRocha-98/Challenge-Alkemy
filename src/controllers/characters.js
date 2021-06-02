@@ -74,7 +74,7 @@ const updateCharacter = async (req, res, next) => {
 const getCharacter = async (req, res, next) => {
   try {
     let {id} = req.params;
-    const character = await CharacterServices.findById(id)
+    const character = await CharacterServices.findByIdWithMovies(id)
     res.json(new Success(character));
     
   } catch (error) {
@@ -110,12 +110,21 @@ const uploadImageCharacter = async(req, res, next) =>{
     }
 }
 
+const assocMovie = async(req, res, next) =>{
+  try {
+      res.json(new Success(await CharacterServices.assocMovie(req.character, req.movie)))
+  } catch (error) {
+      next(errr)
+  }
+}
+
 module.exports = {
     getAllCharacter,
     createCharacter,
     getCharacter,
     updateCharacter,
     deleteCharacter,
-    uploadImageCharacter
+    uploadImageCharacter,
+    assocMovie
 }
  

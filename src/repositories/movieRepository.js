@@ -1,6 +1,7 @@
 const Movie = require('../models/Movie');
 const logger = require('../loaders/logger');
 const Gender = require('../models/Gender');
+const Character = require('../models/Character');
 const {Op} = require('sequelize');
 class MovieRepository{
     constructor(){
@@ -55,6 +56,16 @@ class MovieRepository{
         return await Movie.findByPk(id);
     }
     
+    async findByIdWithCharacters(id){
+        return await Movie.findByPk(id,{
+            include: {
+                model: Character,
+                attributes: ['id', 'image', 'name']
+            },
+            attributes: ['id','title','image', 'creationDate', 'calification', 'typeMovie']
+        });
+    }
+
     async findByTitle(title){
         return await Movie.findOne({where: {title}})
     }
