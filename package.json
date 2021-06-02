@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/GonzaloRocha-98/Challenge-Alkemy#readme",
   "dependencies": {
+    "@sendgrid/mail": "^7.4.4",
     "bcrypt": "^5.0.1",
     "cloudinary": "^1.25.2",
     "dotenv": "^8.2.0",

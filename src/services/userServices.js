@@ -1,9 +1,10 @@
 const UserRepository = require('../repositories/userRepository');
 const repository = new UserRepository();
+const AppError = require('../errors/appError');
+const SendGridServices = require('../services/sendGride.Services');
 
 
 const findAll = async(filter) =>{
-    //return await repository.findAllWithPagination(filter, options)
     return await repository.findAll(filter)
 }
 
@@ -20,6 +21,7 @@ const findByEmail = async(email) => {
 };
 
 const save = async(user) => {
+    await SendGridServices.sendMail(user.email)
     return await repository.save(user)
 }
 

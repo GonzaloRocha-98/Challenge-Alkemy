@@ -37,5 +37,9 @@ module.exports = {
         idAccessKey : process.env.CLOUDINARY_API_KEY,
         secretAccessKey: process.env.CLOUDINARY_API_SECRET,
         bucket_name: process.env.CLOUDINARY_CLOUD_NAME
+    },
+    sendGrid: {
+        apiKey: process.env.SENDGRID_API_KEY,
+        fromEmail: 'rochagonzalo@outlook.com'
     }
 }

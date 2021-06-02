@@ -20,7 +20,6 @@ const login = async(req = request, res = response, next) =>{
 
 const register = async(req = request, res= response, next) =>{
   try {
-    logger.info(JSON.stringify(req.body));
     let user = req.body;
     user = await userService.save(user);
     res.status(201).json(new Success(user))
